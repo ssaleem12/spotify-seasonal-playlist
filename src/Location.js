@@ -1,18 +1,37 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import'./location.css';
 
-const Location = () => {
+class Location extends React.Component{
 
-	function locationClick(){
-		console.log("Letssss goo!")
+	constructor(props){
+		super(props);
+
+		this.state = {lat: null, errorMessage:"Sorry! I can't locate you!"};
 	}
 
-	return(
-		<div className="locate">
-			<button className="button" onClick={locationClick}>Locate me</button>
-		</div>
-	);
-};
+
+
+	render(){
+		window.navigator.geolocation.getCurrentPosition(
+			(position) => {
+				this.setState({lat: position.coords.latitude});
+			},
+			error => {
+				this.setState({errorMessage: error.message})
+			}
+		);
+		function locationClick(){
+			console.log("Letssss goo!")
+		}
+
+		return(
+			<div className="locate">
+				<button onClick={locationClick} className="button">Locate me</button>
+				<div> Lat:{this.state.lat}</div>
+				<div> Error:{this.state.errorMessage}</div>
+			</div>
+		);
+	}
+}
 
 export default Location;
